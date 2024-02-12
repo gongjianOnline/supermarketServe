@@ -38,11 +38,15 @@ router.get('/add', async (ctx, next) => {
 /**查询全部 */
 router.get('/query', async (ctx, next) =>{
   const result = await queryDB('SELECT * FROM commodity')
+  result.data.forEach(element => {
+    element.createDateTxt = dayjs.unix(element.createDate).format('YYYY-MM-DD');
+    element.endDateTxt = dayjs.unix(element.endDate).format('YYYY-MM-DD');
+  });
   if(result.code === 101){
     ctx.body = {
       code:101,
       message:"请求成功",
-      data:result.data
+      data:(result.data).reverse()
     }
   }else{
     ctx.body = {
@@ -55,14 +59,18 @@ router.get('/query', async (ctx, next) =>{
 /**警告商品 */
 router.get("/err",async (ctx,next)=>{
   const result = await queryDB('SELECT * FROM commodity')
-  console.log(result.data)
   if(!result.data.length){
     ctx.body = {
       code:102,
+      data:[],
       message:"当前列表为空"
     }
   }
   const listData = result.data;
+  result.data.forEach(element => {
+    element.createDateTxt = dayjs.unix(element.createDate).format('YYYY-MM-DD');
+    element.endDateTxt = dayjs.unix(element.endDate).format('YYYY-MM-DD');
+  });
   // 过滤出 createDate 和 endDate 两个字段小于二十天的数据
   const filteredCommodities = listData.filter(commodity => {
     const daysBetweenCreateAndEnd = daysBetweenDates(commodity.createDate, commodity.endDate);
@@ -79,7 +87,7 @@ router.get("/err",async (ctx,next)=>{
 /**删除商品 */
 router.get("/del",async (ctx,next)=>{
   const {id} = ctx.query;
-  console.log(id)
+  console.log(id)  
   const result = await delDB('DELETE FROM commodity WHERE id = ?',[id])
   console.log(result)
   ctx.body = {

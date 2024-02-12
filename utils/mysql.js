@@ -3,11 +3,11 @@ const mysql = require('mysql2');
 
 /*创建一个数据库连接*/
 const db = mysql.createPool({
-  host: 'localhost', /* 地址*/
+  host: '', /* 地址*/
   port: "3306", /* 端口号*/
   user: 'root', /* 用户名*/
   password: "", /* 密码*/
-  database: 'supermarket' /*数据库名称*/
+  database: '' /*数据库名称*/
 });
 
 /*连接状态监听器*/
