@@ -87,9 +87,34 @@ const reviseDB = (sql)=>{
   })
 }
 
+/**删除数据 */
+/**'DELETE FROM user WHERE condition = ?', ['your_condition'] */
+const delDB = (sql,params)=>{
+  return new Promise((resolve,reject)=>{
+    db.query(sql,params, (err, data) => {
+      if(err){
+        reject(
+          {
+            code:102,
+            error:err
+          }
+        )
+      }else{
+        resolve(
+          {
+            code:101,
+            data:data
+          }
+        )
+      }
+    });
+  })
+}
+
 module.exports = {
   queryDB,
   addDB,
-  reviseDB
+  reviseDB,
+  delDB
 };
 
