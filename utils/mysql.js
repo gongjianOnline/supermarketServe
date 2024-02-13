@@ -111,10 +111,34 @@ const delDB = (sql,params)=>{
   })
 }
 
+/**数据库去重 */
+const initDB = (sql)=>{
+  return new Promise((resolve,reject)=>{
+    db.query(sql, (err, data) => {
+      if(err){
+        reject(
+          {
+            code:102,
+            error:err
+          }
+        )
+      }else{
+        resolve(
+          {
+            code:101,
+            data:data
+          }
+        )
+      }
+    })
+  })
+}
+
 module.exports = {
   queryDB,
   addDB,
   reviseDB,
-  delDB
+  delDB,
+  initDB
 };
 
